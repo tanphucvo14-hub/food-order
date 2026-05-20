@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FoodHub Express - Ăn Ngon Mỗi Ngày</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Bảng màu chuyên nghiệp: Cam thương hiệu, Nền nhạt sạch sẽ, Chữ đậm */
             --primary-color: #f36f21; 
             --primary-dark: #d35400;
             --text-color: #2c3e50;
@@ -17,6 +17,7 @@
             --light-gray: #f1f2f6;
             --shadow: 0 10px 25px rgba(0,0,0,0.05);
             --radius: 16px;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         * {
@@ -24,27 +25,21 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Lexend', sans-serif;
-            scroll-behavior: smooth; /* Chuyển động cuộn trang mượt */
-        }
-
-        @font-face {
-            font-family: 'Lexend';
-            src: url('https://fonts.gstatic.com/s/lexend/v14/O6b3T4WqfT7v4_83_n4f4w.woff2') format('woff2');
+            scroll-behavior: smooth;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding-top: 80px; /* Tránh đè lên Header */
+            padding-top: 80px;
         }
 
-        /* --- Header Nâng Cấp --- */
         header {
             position: fixed;
             top: 0; left: 0; right: 0;
             height: 80px;
             background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px); /* Hiệu ứng mờ nền */
+            backdrop-filter: blur(10px);
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             display: flex;
             align-items: center;
@@ -74,7 +69,7 @@
             background-color: var(--light-gray);
             font-size: 15px;
             outline: none;
-            transition: 0.3s;
+            transition: var(--transition);
         }
 
         .search-bar input:focus {
@@ -98,7 +93,7 @@
             font-size: 24px;
             color: var(--text-color);
             cursor: pointer;
-            transition: 0.3s;
+            transition: var(--transition);
         }
 
         .cart-trigger:hover { color: var(--primary-color); transform: scale(1.1); }
@@ -115,7 +110,6 @@
             border: 2px solid var(--white);
         }
 
-        /* --- Layout chính --- */
         .container {
             max-width: 1200px;
             margin: 40px auto;
@@ -129,7 +123,6 @@
             .container { grid-template-columns: 1fr 380px; }
         }
 
-        /* --- Danh mục (Categories) --- */
         .categories {
             display: flex; gap: 15px;
             overflow-x: auto;
@@ -148,19 +141,22 @@
             cursor: pointer;
             white-space: nowrap;
             box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: var(--transition);
             display: flex; align-items: center; gap: 10px;
         }
 
-        .cat-btn:hover { transform: translateY(-3px); }
+        .cat-btn:hover { 
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        }
 
         .cat-btn.active {
             background-color: var(--primary-color);
             color: var(--white);
-            transform: scale(1.05);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 15px rgba(243, 111, 33, 0.2);
         }
 
-        /* --- Product Cards --- */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -172,11 +168,24 @@
             border-radius: var(--radius);
             overflow: hidden;
             box-shadow: var(--shadow);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Chuyển động thẻ mượt */
+            transition: var(--transition);
             position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
         }
 
-        .product-card:hover { transform: translateY(-10px) scale(1.02); }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+        }
 
         .product-img-box {
             position: relative;
@@ -187,9 +196,9 @@
         .product-img {
             width: 100%; height: 100%;
             object-fit: cover;
-            transition: 0.5s;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
-        .product-card:hover .product-img { transform: scale(1.1); }
+        .product-card:hover .product-img { transform: scale(1.08); }
 
         .product-badge {
             position: absolute; top: 15px; left: 15px;
@@ -198,6 +207,7 @@
             border-radius: 10px;
             font-size: 12px; font-weight: bold;
             color: var(--white);
+            z-index: 1;
         }
 
         .product-info { padding: 20px; }
@@ -212,12 +222,11 @@
             border-radius: 12px;
             font-weight: 700; color: var(--text-color);
             cursor: pointer;
-            transition: 0.3s;
+            transition: var(--transition);
         }
 
         .add-btn:hover { background-color: var(--primary-color); color: var(--white); }
 
-        /* --- Sidebar Giỏ Hàng --- */
         .cart-sidebar {
             background-color: var(--white);
             border-radius: 24px;
@@ -237,6 +246,12 @@
             display: grid; grid-template-columns: 60px 1fr auto;
             gap: 15px; align-items: center;
             margin-bottom: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(10px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .cart-item-img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; }
@@ -274,7 +289,7 @@
             font-size: 17px; font-weight: 700;
             cursor: pointer;
             margin-top: 20px;
-            transition: 0.3s;
+            transition: var(--transition);
             box-shadow: 0 10px 20px rgba(243, 111, 33, 0.2);
         }
         .checkout-btn:hover { background-color: var(--primary-dark); transform: translateY(-2px); }
@@ -336,18 +351,20 @@
     </div>
 
     <script>
-        // Dữ liệu món ăn với ảnh minh họa chính xác từ Unsplash
+        // Danh sách món ăn được bổ sung phong phú và cập nhật ảnh chính xác tuyệt đối
         const products = [
-            { id: 1, name: "Cơm Tấm Sườn Bì", price: 45000, category: "com", badge: "Bán chạy", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80" },
-            { id: 2, name: "Cơm Gà Xối Mỡ", price: 42000, category: "com", badge: "", img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=400&q=80" },
-            { id: 3, name: "Bún Bò Huế Đặc Biệt", price: 60000, category: "bun", badge: "Hot", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=400&q=80" },
-            { id: 4, name: "Phở Bò Tái Nạm", price: 55000, category: "bun", badge: "", img: "https://images.unsplash.com/photo-1583864697784-a0efc8379f70?auto=format&fit=crop&w=400&q=80" },
-            { id: 5, name: "Pizza Hải Sản", price: 120000, category: "an-vat", badge: "Giảm 10%", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=400&q=80" },
-            { id: 6, name: "Gà Rán Giòn Rụm", price: 39000, category: "an-vat", badge: "", img: "https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=400&q=80" },
-            { id: 7, name: "Trà Sữa Trân Châu", price: 35000, category: "nuoc", badge: "", img: "https://images.unsplash.com/photo-1541658016709-82535e94bc69?auto=format&fit=crop&w=400&q=80" },
-            { id: 8, name: "matcha Đá Xay", price: 45000, category: "nuoc", badge: "", img: "https://images.unsplash.com/photo-1536939459926-301728717817?auto=format&fit=crop&w=400&q=80" },
-            { id: 9, name: "Bánh Mì Thịt Nướng", price: 25000, category: "an-vat", badge: "Bán chạy", img: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=400&q=80" },
-            { id: 10, name: "Cà Phê Đen Đá", price: 20000, category: "nuoc", badge: "", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=400&q=80" }
+            { id: 1, name: "Cơm Tấm Sườn Bì Chả", price: 45000, category: "com", badge: "Bán chạy", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80" },
+            { id: 2, name: "Cơm Gà Xối Mỡ ", price: 42000, category: "com", badge: "", img: "https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?auto=format&fit=crop&w=500&q=80" },
+            { id: 3, name: "Bún Bò Huế Đặc Biệt", price: 60000, category: "bun", badge: "Hot", img: "https://images.unsplash.com/photo-1625398407796-82650a8c135f?auto=format&fit=crop&w=500&q=80" },
+            { id: 4, name: "Phở Bò Tái Nạm ", price: 55000, category: "bun", badge: "Truyền thống", img: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=500&q=80" },
+            { id: 5, name: "Pizza Hải Sản Phô Mai", price: 120000, category: "an-vat", badge: "Giảm 10%", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=500&q=80" },
+            { id: 6, name: "Gà Rán", price: 39000, category: "an-vat", badge: "", img: "https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=500&q=80" },
+            { id: 7, name: "Bánh Mì Thịt Nướng Bơ", price: 25000, category: "an-vat", badge: "Đặc sản", img: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=500&q=80" },
+            { id: 8, name: "Khoai Tây Chiên Lắc Phô Mai", price: 29000, category: "an-vat", badge: "", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=500&q=80" },
+            { id: 9, name: "Trà Sữa Trân Châu Đường Đen", price: 35000, category: "nuoc", badge: "", img: "https://images.unsplash.com/photo-1541658016709-82535e94bc69?auto=format&fit=crop&w=500&q=80" },
+            { id: 10, name: "Matcha Đá Xay Kem Béo", price: 45000, category: "nuoc", badge: "", img: "https://images.unsplash.com/photo-1536939459926-301728717817?auto=format&fit=crop&w=500&q=80" },
+            { id: 11, name: "Cà Phê Sữa Đá Sài Gòn", price: 22000, category: "nuoc", badge: "Tỉnh táo", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=500&q=80" },
+            { id: 12, name: "Trà Đào Cam Sả", price: 32000, category: "nuoc", badge: "Fresh", img: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=500&q=80" }
         ];
 
         let cart = [];
@@ -368,20 +385,23 @@
                 return matchCategory && matchSearch;
             });
 
-            filtered.forEach(p => {
-                container.innerHTML += `
-                    <div class="product-card">
-                        <div class="product-img-box">
-                            ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
-                            <img src="${p.img}" alt="${p.name}" class="product-img">
-                        </div>
-                        <div class="product-info">
-                            <div class="product-name">${p.name}</div>
-                            <div class="product-price">${formatMoney(p.price)}</div>
-                            <button class="add-btn" onclick="addToCart(${p.id})">Thêm vào giỏ +</button>
-                        </div>
+            filtered.forEach((p, index) => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                // Tạo hiệu ứng thác đổ mượt mà khi load thẻ món ăn
+                card.style.animationDelay = `${index * 0.05}s`;
+                card.innerHTML = `
+                    <div class="product-img-box">
+                        ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
+                        <img src="${p.img}" alt="${p.name}" class="product-img">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${p.name}</div>
+                        <div class="product-price">${formatMoney(p.price)}</div>
+                        <button class="add-btn" onclick="addToCart(${p.id})">Thêm vào giỏ +</button>
                     </div>
                 `;
+                container.appendChild(card);
             });
         }
 
@@ -457,12 +477,11 @@
 
         function openCheckoutForm() {
             if(cart.length === 0) return alert("Vui lòng chọn món ăn!");
-            alert("🎉 Đặt hàng thành công! Đơn hàng của bạn đang được xử lý.");
+            alert("🎉 Đặt hàng thành công! Đơn hàng của bạn đang được hệ thống xử lý.");
             cart = [];
             updateCart();
         }
 
-        // Khởi tạo hiển thị
         displayProducts();
     </script>
 </body>
